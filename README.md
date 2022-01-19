@@ -1,7 +1,8 @@
 # WordPress recreate thumbnails
+
 Script to regenerate or adjust all thumbnail sizes from original source images within a WordPress blog. Useful when sizes have changed due to a switch/update of theme or the modification of [`add_image_size()`](https://codex.wordpress.org/Function_Reference/add_image_size) setup.
 
-Whilst there are a [number](http://wordpress.org/plugins/regenerate-thumbnails/) of [regenerate](https://wordpress.org/plugins/force-regenerate-thumbnails/) image utilities [already](https://wordpress.org/plugins/ajax-thumbnail-rebuild/) available, most if not all are implemented as WordPress plugins - thus their processing happens within a HTTP request slowing things down, timing out and/or taking a large amount of time to complete due to the need of incremental processing.
+Whilst there are a [number](https://wordpress.org/plugins/regenerate-thumbnails/) of [regenerate](https://wordpress.org/plugins/force-regenerate-thumbnails/) image utilities [already](https://wordpress.org/plugins/ajax-thumbnail-rebuild/) available, most if not all are implemented as WordPress plugins - thus their processing happens within a HTTP request slowing things down, timing out and/or taking a large amount of time to complete due to the need of incremental processing.
 
 Script should be called from the PHP CLI and gets the job done as fast as your CPU allows - it was written for a WordPress blog containing well over 4GB of images where a plugin style utility wasn't really going to cut it. Having said that, it is rather manual and **can be destructive** - a reliable and tested backup and some decent knowledge of the WordPress image sizes system is strongly advisable.
 
@@ -14,12 +15,15 @@ In addition a second [find orphan images](#find-orphan-images) script can be exe
 	- [Usage](#usage-1)
 
 ## Requires
+
 - PHP 5.5.
-- [GD](http://php.net/manual/en/book.image.php) for thumbnail image creation.
-- [MySQLi](http://php.net/mysqli) with [MySQL native driver](http://php.net/manual/en/book.mysqlnd.php).
+- [GD](https://php.net/manual/en/book.image.php) for thumbnail image creation.
+- [MySQLi](https://php.net/mysqli) with [MySQL native driver](https://php.net/manual/en/book.mysqlnd.php).
 
 ## Rebuild thumbnails
+
 The `wordpressrebuildthumbnails.php` script performs the following tasks:
+
 - Loads all `wp_posts` of type `attachment`.
 - Extracts the origin image filename from the `guid` field, ensures image actually exists on disk and corrects `post_mime_type` for the image if required.
 - Ensures attachment has both `_wp_attached_file` and `_wp_attachment_metadata` rows in the `wp_postmeta` table, creates if they do not exist.
@@ -32,6 +36,7 @@ The `wordpressrebuildthumbnails.php` script performs the following tasks:
 The script will only modify/resize images when required - if previous images meet the defined size requirements they will **not** be regenerated. This means the script can be re-run to validate all database data lines up with disk image files.
 
 ### Usage
+
 Configure the constants at the top of [`wordpressrebuildthumbnails.php`](wordpressrebuildthumbnails.php) to suit. Details of each setting are as follows:
 
 <table>
@@ -90,11 +95,14 @@ $ php wordpressrebuildthumbnails.php
 ```
 
 ## Find orphan images
+
 After you are happy with the thumbnail regeneration process, the [`wordpressfindorphanimages.php`](wordpressfindorphanimages.php) script can be used to determine the following:
+
 - Any images located under `/wp-content/uploads/[YEAR]/[MONTH]` which are never referenced within any `_wp_attachment_metadata` database records.
 - Images referenced in `_wp_attachment_metadata` which are missing from `/wp-content/uploads/` on disk.
 
 ### Usage
+
 Similar configuration to the resize script [above](#usage), with the following additional settings:
 
 <table>
